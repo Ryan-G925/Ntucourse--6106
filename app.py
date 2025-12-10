@@ -25,7 +25,7 @@ def main():
        c.close()
        conn.close()
        flag=0
-       return(render_template("main.html"))
+    return(render_template("main.html"))
 
 @app.route("/paynow",methods=["GET","POST"])
 def paynow():
