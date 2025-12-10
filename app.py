@@ -6,11 +6,12 @@ app= Flask(__name__)
 
 @app.route("/",methods=["GET","POST"])
 def index():
+
      return(render_template("index.html"))
 
 @app.route("/main",methods=["GET","POST"])
 def main():
-    name= request.form.get("name")
+    name= request.form.get("q")
     timestamp= datetime.datetime.now()
     conn=sqlite3.connect("user.db")
     c= conn.cursor()
@@ -40,6 +41,12 @@ def userlog():
 
 @app.route("/deleteuserlog",methods=["GET","POST"])
 def deleteuserlog():
+     conn=sqlite3.connect("user.db")
+     c=conn.cursor()
+     c.execute("delete from user")
+     conn.commit()
+     c.close()
+     conn.close()
      return(render_template("deleteuserlog.html"))
 
 if __name__ =="__main__":
