@@ -1,0 +1,89 @@
+<head>
+    <meta name=""viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    
+    <div class="container">
+    
+        <h2>Deposit Money</h2>
+        <input type="text" id="depositor" placeholder="Depositor Address">
+        <input type="number" id="amount" placeholder="Amount to Deposit">
+        <button class="btn" onclick="Deposit()">Deposit</button>
+        <button class="btn" onclick="View_Deposition()">View_Deposition</button>
+
+        <form action ="/main" method="post">
+            <input type="submit"value="Main">
+        </form>
+
+        <p id="view_depositor"></p>
+        <p id="view_amount"></p>
+
+        <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+        
+        <script>
+            const contractAddress="0x9b697201c9cf9a942f19d01a381591ccda6307c9";
+            const contractABI=[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "depositor_input",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount_input",
+				"type": "uint256"
+			}
+		],
+		"name": "deposit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "deposit_view",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+          const web3 = new Web3(Web3.givenProvider);
+          const contract = new web3.eth.Contract(contractABI, contractAddress);
+            async function Deposit(){
+                const accounts = await web3.eth.requestAccounts();
+                const depositor = document.getElementById('depositor').value;
+                const amount= document.getElementById('amount').value;
+                console.log(depositor,amount);
+                console.log(accounts[0]);
+                await contract.methods.deposit(depositor,amount).send({ from: accounts[0]});
+            }
+
+            async function View_Deposition(){
+                const result = await contract.methods.deposit_view().call();
+                console.log(result[0],result[1]);
+                document.getElementById('view_depositor').innerText = "depositor: " + result[0];
+                document.getElementById('view_amount').innerText = "amount: " + result[1];
+            }
+
+
+        </script>
+
+
+    </div>
+
+</body>

@@ -31,6 +31,9 @@ def main():
 def paynow():
      return(render_template("paynow.html"))
 
+@app.route("/depositmoney",methods=["GET","POST"])
+def depositmoney():
+     return(render_template("deposit.html"))
 
 @app.route("/userlog",methods=["GET","POST"])
 def userlog():
